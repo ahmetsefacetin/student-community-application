@@ -1,11 +1,6 @@
 import { useEffect, useState } from "react";
 import apiClient from "../services/apiClient";
-
-interface SystemMessage {
-  id: number;
-  code: string;
-  message: string;
-}
+import type { SystemMessage } from "../types/systemMessage";
 
 const ComingSoon = () => {
   const [message, setMessage] = useState<string>("");
