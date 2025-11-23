@@ -28,14 +28,14 @@ apiClient.interceptors.request.use(
 let isRefreshing = false;
 
 let failedQueue: Array<{
-  resolve: (token: string) => void;
-  reject: (err: any) => void;
+  onSuccess: (token: string) => void;
+  onError: (err: any) => void;
 }> = [];
 
 function processQueue(error: any, token: string | null = null) {
   failedQueue.forEach((prom) => {
-    if (error) prom.reject(error);
-    else prom.resolve(token!);
+    if (error) prom.onSuccess(error);
+    else prom.onError(token!);
   });
   failedQueue = [];
 }
@@ -53,12 +53,14 @@ apiClient.interceptors.response.use(
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({
-            resolve: (newToken: string) => {
+            onSuccess: (newToken: string) => {
               originalRequest.headers = originalRequest.headers ?? {};
               originalRequest.headers.Authorization = `Bearer ${newToken}`;
               resolve(apiClient(originalRequest));
             },
-            reject,
+            onError: (err: any) => {
+              reject(err);
+            }
           });
         });
       }
@@ -68,9 +70,10 @@ apiClient.interceptors.response.use(
       try {
         const res = await authService.refresh();
         const newToken = res.token;
+        const newRefreshToken = res.refreshToken
 
         localStorage.setItem("accessToken", newToken);
-        localStorage.setItem("refreshToken", res.refreshToken);
+        localStorage.setItem("refreshToken", newRefreshToken);
 
         processQueue(null, newToken);
 

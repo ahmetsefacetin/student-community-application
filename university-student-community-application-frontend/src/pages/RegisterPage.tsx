@@ -32,7 +32,10 @@ export default function RegisterPage() {
       await register(form);
       navigate("/coming", { replace: true }); // başarılı → home
     } catch (err: any) {
-      setError(err.response?.data?.message || "Registration failed.");
+      const errorMsg = err.response?.data?.errors 
+        ? Object.values(err.response?.data?.errors).flat().join('\n')
+        : "Registration failed.";
+      setError(errorMsg);
     } finally {
       setLoading(false);
     }
@@ -43,7 +46,7 @@ export default function RegisterPage() {
       <div className="bg-white p-8 rounded-xl shadow-md w-96">
         <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
 
-        {error && <div className="text-red-600 text-sm mb-4">{error}</div>}
+        {error && <div className="text-red-600 text-sm mb-4 whitespace-pre-line">{error}</div>}
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
 
