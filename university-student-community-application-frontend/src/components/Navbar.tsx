@@ -1,9 +1,9 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
 const Navbar: React.FC = () => {
-  const { logout } = useAuth();
+  const { logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -13,24 +13,33 @@ const Navbar: React.FC = () => {
 
   return (
     <nav style={{ 
-      position: 'fixed', // Fixes the navbar to the top
+      position: 'fixed',
       top: 0,
       left: 0,
-      width: '100%', // Spans the full width
-      zIndex: 1000, // Ensures it stays on top of other elements
-    //   backgroundColor: '#ffffff', // Background color is needed so content doesn't show through
+      width: '100%',
+      zIndex: 1000,
       padding: '1rem', 
       borderBottom: '1px solid', 
       display: 'flex', 
       justifyContent: 'space-between', 
       alignItems: 'center',
-      boxSizing: 'border-box' // Ensures padding doesn't break the 100% width
+      boxSizing: 'border-box'
     }}>
       <div className="nav-links">
         {/* <Link to="/" style={{ marginRight: '1rem' }}>Home</Link> */}
         {/* Add other navigation links here */}
       </div>
-      <button onClick={handleLogout}>Logout</button>
+      
+      <div style={{ display: 'flex', gap: '10px' }}>
+        {isAuthenticated ? (
+          <button onClick={handleLogout}>Logout</button>
+        ) : (
+          <>
+            <button onClick={() => navigate('/login')}>Login</button>
+            <button onClick={() => navigate('/register')}>Register</button>
+          </>
+        )}
+      </div>
     </nav>
   );
 };

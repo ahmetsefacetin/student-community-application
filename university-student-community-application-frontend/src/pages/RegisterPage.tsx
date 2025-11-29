@@ -30,7 +30,7 @@ export default function RegisterPage() {
 
     try {
       await register(form);
-      navigate("/coming", { replace: true }); // başarılı → home
+      navigate("/", { replace: true }); // başarılı → home
     } catch (err: any) {
       const errorMsg = err.response?.data?.errors 
         ? Object.values(err.response?.data?.errors).flat().join('\n')

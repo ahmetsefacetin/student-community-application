@@ -1,5 +1,4 @@
 import { Routes, Route } from "react-router-dom";
-import ComingSoonPage from "../pages/ComingSoonPage";
 import HomePage from "../pages/HomePage";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
@@ -9,23 +8,22 @@ import ProtectedRoute from "./ProtectedRoute"; // Import ProtectedRoute if you w
 const AppRouter = () => {
   return (
     <Routes>
-      {/* 1. Pages WITHOUT Navbar */}
-      {/* These are standalone pages */}
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
-      <Route path="/" element={<HomePage />} />
 
-      {/* 2. Pages WITH Navbar */}
-      {/* This Route acts as a wrapper. It renders Layout, which contains the Navbar */}
+      {/* Wrap routes with Layout to include Navbar and other common components */ }
       <Route element={<Layout />}>
         
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/" element={<HomePage />} />
+
         <Route element={<ProtectedRoute />}>
-            {/* These pages will appear inside the Layout's <Outlet /> */}
-            <Route path="/coming" element={<ComingSoonPage />} />
+          {/* Protected routes go here */}
+          {/* now there are no protected routes */}
+
         </Route>
 
       </Route>
-      
+
     </Routes>
   );
 };

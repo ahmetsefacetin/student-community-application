@@ -8,7 +8,7 @@ export default function LoginPage() {
   const location = useLocation();
 
   // Eğer kullanıcı başka bir sayfadan yönlendirilmişse (ör: ProtectedRoute)
-  const from = (location.state as { from?: Location })?.from?.pathname || "/coming";
+  const from = (location.state as { from?: Location })?.from?.pathname || "/";
 
   // local state'ler
   const [userNameOrEmail, setUserNameOrEmail] = useState("");
