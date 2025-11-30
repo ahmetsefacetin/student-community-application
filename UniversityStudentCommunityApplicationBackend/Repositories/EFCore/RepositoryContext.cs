@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Config;
+using System.Reflection.Emit;
 
 namespace Repositories.EFCore
 {
@@ -10,18 +11,21 @@ namespace Repositories.EFCore
         public RepositoryContext(DbContextOptions<RepositoryContext> options) : base(options) { }
 
         public DbSet<SystemMessage> SystemMessages => Set<SystemMessage>();
-
         public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+        public DbSet<Club> Clubs => Set<Club>();
+        public DbSet<ClubMembership> ClubMemberships => Set<ClubMembership>();
 
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(builder);
+            base.OnModelCreating(modelBuilder);
 
-            builder.ApplyConfiguration(new SystemMessageConfiguration());
-            builder.ApplyConfiguration(new UserConfiguration());
-            builder.ApplyConfiguration(new RoleConfiguration());
-            builder.ApplyConfiguration(new RefreshTokenConfiguration());
+            modelBuilder.ApplyConfiguration(new SystemMessageConfiguration());
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
+            modelBuilder.ApplyConfiguration(new RefreshTokenConfiguration());
+            modelBuilder.ApplyConfiguration(new ClubConfiguration());
+            modelBuilder.ApplyConfiguration(new ClubMembershipConfiguration());
 
         }
     }

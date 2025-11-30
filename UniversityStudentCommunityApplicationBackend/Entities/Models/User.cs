@@ -6,8 +6,10 @@ namespace Entities.Models
     {
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
-
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; }
         public ICollection<RefreshToken>? RefreshTokens { get; set; }
+
+        // Add this computed property to fix the error
+        public string FullName => $"{FirstName} {LastName}".Trim();
     }
 }

@@ -1,0 +1,47 @@
+﻿using Entities.Models;
+using Microsoft.EntityFrameworkCore;
+using Repositories.Contracts;
+using Repositories.EFCore;
+
+namespace Repositories.Config
+{
+    public class ClubRepository : IClubRepository
+    {
+        private readonly RepositoryContext _context;
+
+        public ClubRepository(RepositoryContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<IEnumerable<Club>> GetAllClubsAsync(bool trackChanges)
+        {
+            return await (trackChanges
+                ? _context.Clubs
+                : _context.Clubs.AsNoTracking())
+                .ToListAsync();
+        }
+
+        public async Task<Club?> GetClubByIdAsync(int id, bool trackChanges)
+        {
+            return await (trackChanges
+                ? _context.Clubs
+                : _context.Clubs.AsNoTracking())
+                .FirstOrDefaultAsync(c => c.Id == id);
+        }
+
+        public async Task<Club?> GetClubWithMembersAsync(int id, bool trackChanges)
+        {
+            return await (trackChanges
+                ? _context.Clubs.Include(c => c.Memberships)
+                : _context.Clubs.Include(c => c.Memberships).AsNoTracking())
+                .FirstOrDefaultAsync(c => c.Id == id);
+        }
+
+        public void CreateClub(Club club) => _context.Clubs.Add(club);
+
+        public void DeleteClub(Club club) => _context.Clubs.Remove(club);
+
+        public void UpdateClub(Club club) => _context.Clubs.Update(club);
+    }
+}

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Presentation.Controllers;
+using Repositories.Config;
 using Repositories.Contracts;
 using Repositories.EFCore;
 using Services;
@@ -30,10 +31,14 @@ builder.Services.AddDbContext<RepositoryContext>(options =>
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ISystemMessageRepository, SystemMessageRepository>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+builder.Services.AddScoped<IClubRepository, ClubRepository>();
+builder.Services.AddScoped<IClubMembershipRepository, ClubMembershipRepository>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ISystemMessageService, SystemMessageService>();
 builder.Services.AddScoped<JwtTokenService>();
+builder.Services.AddScoped<IClubService, ClubService>();
+builder.Services.AddScoped<IClubMembershipService, ClubMembershipService>();
 
 
 builder.Services.AddIdentity<User, IdentityRole>(options =>
