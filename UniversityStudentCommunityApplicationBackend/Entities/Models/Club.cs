@@ -14,5 +14,7 @@
 
         // Memberships
         public ICollection<ClubMembership> Memberships { get; set; } = new List<ClubMembership>();
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

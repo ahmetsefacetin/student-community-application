@@ -5,7 +5,7 @@
 namespace WebApi.Migrations
 {
     /// <inheritdoc />
-    public partial class SeedAdminUserPassword : Migration
+    public partial class createAtClub : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,7 +15,7 @@ namespace WebApi.Migrations
                 keyColumn: "Id",
                 keyValue: "admin-seed-001",
                 columns: new[] { "ConcurrencyStamp", "PasswordHash", "SecurityStamp" },
-                values: new object[] { "fe659a52-8163-4a12-8533-3cab62cb507c", "AQAAAAIAAYagAAAAEEvnFaaFkfyh/vY0bdM5e9gfyImVl5uLFaOf5kBo+4FwUTzTaBfoSej1b0hIlWfosA==", "2ceddaf9-477c-4789-a3aa-509f29f76a3c" });
+                values: new object[] { "b6d325e1-85ca-4f99-b9c0-1ebd32de108e", "AQAAAAIAAYagAAAAEIonCsYJuSEsRMDXDLJWmrmVBar6Mfu4c8wgSNdXxCWvFC0vNrxprvg/Y5eUC8BNsQ==", "ed162fff-7839-4875-a76d-5bce6c8cf900" });
         }
 
         /// <inheritdoc />
@@ -26,7 +26,7 @@ namespace WebApi.Migrations
                 keyColumn: "Id",
                 keyValue: "admin-seed-001",
                 columns: new[] { "ConcurrencyStamp", "PasswordHash", "SecurityStamp" },
-                values: new object[] { "25f608a5-bb5f-4936-b59c-0bb0e8996b4d", "AQAAAAIAAYagAAAAEMbvjbUKTIJOhDaiEjuj5h95KLGoqVtwfvPETJw0XEqrVJI9r3lOMcwQxkFqEAyUwA==", "1e80e00b-83a2-4acf-a661-619ccdb59a88" });
+                values: new object[] { "7b70713f-8222-44d8-95a5-193bb3a376a2", "AQAAAAIAAYagAAAAEF7pVtaO64Mavgx06zL5XMuyxMWk2kEdjhIyCEfoSEPYLJwsp1JHI7Wj4FfdYwWlcg==", "c284f9ce-390d-484d-a3c2-a00f55067d57" });
         }
     }
 }

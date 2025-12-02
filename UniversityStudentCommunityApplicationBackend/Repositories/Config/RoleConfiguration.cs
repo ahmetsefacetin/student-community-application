@@ -17,12 +17,6 @@ namespace Repositories.Config
                 },
                 new IdentityRole
                 {
-                    Id = "2",
-                    Name = "ClubManager",
-                    NormalizedName = "CLUBMANAGER"
-                },
-                new IdentityRole
-                {
                     Id = "3",
                     Name = "Student",
                     NormalizedName = "STUDENT"

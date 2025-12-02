@@ -39,19 +39,5 @@ namespace Presentation.Controllers
             return NoContent();
         }
 
-        [HttpPost("assign-role")]
-        [Authorize(Roles = "Admin")] // Sadece Admin role verebilir
-        public async Task<ActionResult> AssignRole([FromBody] AssignRoleDto dto)
-        {
-            try
-            {
-                await _service.AssignRoleAsync(dto.UserId, dto.NewRole);
-                return Ok(new { message = "Role başarıyla atandı" });
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-        }
     }
 }

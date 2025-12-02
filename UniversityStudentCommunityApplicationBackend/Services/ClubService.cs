@@ -30,7 +30,7 @@ namespace Services
         // -------------------------------------------------------------
         // 1) CREATE CLUB
         // -------------------------------------------------------------
-        public async Task<ClubDetailDto> CreateClubAsync(CreateClubDto dto)
+        public async Task<ClubResponseDto> CreateClubAsync(CreateClubDto dto)
         {
             var manager = await _userManager.FindByIdAsync(dto.ManagerUserId);
             if (manager == null)
@@ -57,29 +57,20 @@ namespace Services
             _membershipRepository.AddMembership(membership);
             await _unitOfWork.SaveChangesAsync();
 
-            return new ClubDetailDto
+            return new ClubResponseDto
             {
                 Id = club.Id,
                 Name = club.Name,
                 Description = club.Description,
                 ManagerId = manager.Id,
-                ManagerFullName = $"{manager.FirstName} {manager.LastName}",
-                Members = new List<ClubMemberDto>
-                {
-                    new ClubMemberDto
-                    {
-                        UserId = manager.Id,
-                        FullName = $"{manager.FirstName} {manager.LastName}",
-                        Role = ClubRole.Manager.ToString()
-                    }
-                }
+                ManagerFullName = manager.FullName
             };
         }
 
         // -------------------------------------------------------------
         // 2) GET CLUB BY ID
         // -------------------------------------------------------------
-        public async Task<ClubDetailDto> GetClubByIdAsync(int id)
+        public async Task<ClubResponseDto> GetClubByIdAsync(int id)
         {
             var club = await _clubRepository.GetClubWithMembersAsync(id, false);
             if (club == null)
@@ -92,31 +83,30 @@ namespace Services
                 Role = m.Role.ToString()
             }).ToList();
 
-            return new ClubDetailDto
+            return new ClubResponseDto
             {
                 Id = club.Id,
                 Name = club.Name,
                 Description = club.Description,
                 ManagerId = club.ManagerId,
-                ManagerFullName = $"{club.Manager.FirstName} {club.Manager.LastName}",
-                Members = members
+                ManagerFullName = club.Manager.FullName
             };
         }
 
         // -------------------------------------------------------------
         // 3) GET ALL CLUBS
         // -------------------------------------------------------------
-        public async Task<IEnumerable<ClubListDto>> GetAllClubsAsync()
+        public async Task<IEnumerable<ClubResponseDto>> GetAllClubsAsync()
         {
             var clubs = await _clubRepository.GetAllClubsAsync(false);
 
-            return clubs.Select(c => new ClubListDto
+            return clubs.Select(c => new ClubResponseDto
             {
                 Id = c.Id,
                 Name = c.Name,
                 Description = c.Description,
                 ManagerId = c.ManagerId,
-                ManagerFullName = $"{c.Manager.FirstName} {c.Manager.LastName}"
+                ManagerFullName = c.Manager.FullName
             });
         }
 

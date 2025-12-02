@@ -12,8 +12,8 @@ using Repositories.EFCore;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20251202094310_SeedAdminUserPassword")]
-    partial class SeedAdminUserPassword
+    [Migration("20251202163612_createAtClub")]
+    partial class createAtClub
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,6 +32,9 @@ namespace WebApi.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasMaxLength(500)
@@ -293,7 +296,7 @@ namespace WebApi.Migrations
                         {
                             Id = "admin-seed-001",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "fe659a52-8163-4a12-8533-3cab62cb507c",
+                            ConcurrencyStamp = "b6d325e1-85ca-4f99-b9c0-1ebd32de108e",
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "admin@clubapp.com",
                             EmailConfirmed = true,
@@ -302,9 +305,9 @@ namespace WebApi.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@CLUBAPP.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEvnFaaFkfyh/vY0bdM5e9gfyImVl5uLFaOf5kBo+4FwUTzTaBfoSej1b0hIlWfosA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIonCsYJuSEsRMDXDLJWmrmVBar6Mfu4c8wgSNdXxCWvFC0vNrxprvg/Y5eUC8BNsQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "2ceddaf9-477c-4789-a3aa-509f29f76a3c",
+                            SecurityStamp = "ed162fff-7839-4875-a76d-5bce6c8cf900",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -342,12 +345,6 @@ namespace WebApi.Migrations
                             Id = "1",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "2",
-                            Name = "ClubManager",
-                            NormalizedName = "CLUBMANAGER"
                         },
                         new
                         {

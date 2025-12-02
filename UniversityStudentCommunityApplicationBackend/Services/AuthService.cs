@@ -180,24 +180,5 @@ namespace Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task AssignRoleAsync(string userId, string newRole)
-        {
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
-                throw new NotFoundException("User not found");
-
-            var validRoles = new List<string> { "Admin", "ClubManager", "Student" };
-            if (!validRoles.Contains(newRole))
-                throw new ArgumentException("Invalid role");
-
-            var currentRoles = await _userManager.GetRolesAsync(user);
-            if (currentRoles.Any())
-                await _userManager.RemoveFromRolesAsync(user, currentRoles);
-
-            if (!await _roleManager.RoleExistsAsync(newRole))
-                await _roleManager.CreateAsync(new IdentityRole(newRole));
-
-            await _userManager.AddToRoleAsync(user, newRole);
-        }
     }
 }

@@ -8,6 +8,5 @@ namespace Services.Contracts
         Task<AuthResponseDto> LoginAsync(LoginDto dto);
         Task<AuthResponseDto> RefreshAsync(RefreshRequestDto dto);
         Task LogoutAsync(RefreshRequestDto dto); // belirli refresh token'ı revoke
-        Task AssignRoleAsync(string userId, string newRole);
     }
 }

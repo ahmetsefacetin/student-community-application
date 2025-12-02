@@ -11,16 +11,16 @@ export default function ProtectedRoute({ roles }: ProtectedRouteProps) {
 
   if (loading) return <div>Loading...</div>; // ⏳ Auth durumu çözülüyor
 
-  // 1️⃣ Kullanıcı giriş yapmamışsa → login sayfasına yönlendir
+  //  Kullanıcı giriş yapmamışsa → login sayfasına yönlendir
   if (!isAuthenticated) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // 2️⃣ Eğer belirli roller belirtilmişse ve kullanıcı bu rollerden hiçbirine sahip değilse
+  //  Eğer belirli roller belirtilmişse ve kullanıcı bu rollerden hiçbirine sahip değilse
   if (roles && !roles.some((r) => user?.roles.includes(r))) {
-    return <Navigate to="/unauthorized" state={{ from: location }} replace />;
+    return <Navigate to="/" state={{ from: location }} replace />;
   }
 
-  // 3️⃣ Her şey yolundaysa, alt route’u (child route) render et
+  //  Her şey yolundaysa, alt route’u (child route) render et
   return <Outlet />;
 }

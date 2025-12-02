@@ -12,8 +12,8 @@ using Repositories.EFCore;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20251130102110_club-and-club-membership")]
-    partial class clubandclubmembership
+    [Migration("20251202182507_asdfg")]
+    partial class asdfg
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,6 +32,9 @@ namespace WebApi.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasMaxLength(500)
@@ -82,6 +85,62 @@ namespace WebApi.Migrations
                         .IsUnique();
 
                     b.ToTable("ClubMemberships", (string)null);
+                });
+
+            modelBuilder.Entity("Entities.Models.ClubRoleDefinition", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("RoleValue")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ClubRoleDefinitions", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Regular club member.",
+                            DisplayName = "Club Member",
+                            RoleName = "Member",
+                            RoleValue = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Club officer with additional permissions.",
+                            DisplayName = "Club Officer",
+                            RoleName = "Officer",
+                            RoleValue = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Full control of the club.",
+                            DisplayName = "Club Manager",
+                            RoleName = "Manager",
+                            RoleValue = 3
+                        });
                 });
 
             modelBuilder.Entity("Entities.Models.RefreshToken", b =>
@@ -231,6 +290,27 @@ namespace WebApi.Migrations
                         .HasFilter("[UserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "admin-seed-001",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "bad31e43-db80-4fb8-b286-9a92ea6c608a",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "admin@clubapp.com",
+                            EmailConfirmed = true,
+                            FirstName = "System",
+                            LastName = "Administrator",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@CLUBAPP.COM",
+                            NormalizedUserName = "ADMIN",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGFUvpeXbxm7fJeMETKTjyZiWJk3Zg7f7pcVQ8GKGU3zFanXCT7/zddHf9tbeUYU2w==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "17a1fb73-738a-46f8-94f4-dbde44e4ccde",
+                            TwoFactorEnabled = false,
+                            UserName = "admin"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -265,12 +345,6 @@ namespace WebApi.Migrations
                             Id = "1",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "2",
-                            Name = "ClubManager",
-                            NormalizedName = "CLUBMANAGER"
                         },
                         new
                         {
@@ -365,6 +439,13 @@ namespace WebApi.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "admin-seed-001",
+                            RoleId = "1"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>

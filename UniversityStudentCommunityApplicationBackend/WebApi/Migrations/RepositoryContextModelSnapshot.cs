@@ -30,6 +30,9 @@ namespace WebApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
@@ -290,7 +293,7 @@ namespace WebApi.Migrations
                         {
                             Id = "admin-seed-001",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "fe659a52-8163-4a12-8533-3cab62cb507c",
+                            ConcurrencyStamp = "bad31e43-db80-4fb8-b286-9a92ea6c608a",
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "admin@clubapp.com",
                             EmailConfirmed = true,
@@ -299,9 +302,9 @@ namespace WebApi.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@CLUBAPP.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEvnFaaFkfyh/vY0bdM5e9gfyImVl5uLFaOf5kBo+4FwUTzTaBfoSej1b0hIlWfosA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGFUvpeXbxm7fJeMETKTjyZiWJk3Zg7f7pcVQ8GKGU3zFanXCT7/zddHf9tbeUYU2w==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "2ceddaf9-477c-4789-a3aa-509f29f76a3c",
+                            SecurityStamp = "17a1fb73-738a-46f8-94f4-dbde44e4ccde",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -339,12 +342,6 @@ namespace WebApi.Migrations
                             Id = "1",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "2",
-                            Name = "ClubManager",
-                            NormalizedName = "CLUBMANAGER"
                         },
                         new
                         {

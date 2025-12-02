@@ -28,19 +28,6 @@ namespace Entities.DTOs
     }
 
     // ---------------------------------------------------------
-    // LIST PAGE DTO
-    // ---------------------------------------------------------
-    public class ClubListDto
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public string? Description { get; set; }
-
-        public string ManagerId { get; set; } = string.Empty;
-        public string ManagerFullName { get; set; } = string.Empty;
-    }
-
-    // ---------------------------------------------------------
     // MEMBER DTO
     // ---------------------------------------------------------
     public class ClubMemberDto
@@ -53,7 +40,7 @@ namespace Entities.DTOs
     // ---------------------------------------------------------
     // DETAIL VIEW DTO
     // ---------------------------------------------------------
-    public class ClubDetailDto
+    public class ClubResponseDto
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
@@ -61,7 +48,5 @@ namespace Entities.DTOs
 
         public string ManagerId { get; set; } = string.Empty;
         public string ManagerFullName { get; set; } = string.Empty;
-
-        public List<ClubMemberDto> Members { get; set; } = new();
     }
 }
