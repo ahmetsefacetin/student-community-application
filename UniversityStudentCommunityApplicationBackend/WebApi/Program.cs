@@ -33,6 +33,7 @@ builder.Services.AddScoped<ISystemMessageRepository, SystemMessageRepository>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<IClubRepository, ClubRepository>();
 builder.Services.AddScoped<IClubMembershipRepository, ClubMembershipRepository>();
+builder.Services.AddScoped<IClubRoleDefinitionRepository, ClubRoleDefinitionRepository>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ISystemMessageService, SystemMessageService>();

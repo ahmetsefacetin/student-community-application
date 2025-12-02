@@ -19,12 +19,22 @@ namespace Repositories.Config
             builder.Property(c => c.Description)
                    .HasMaxLength(500);
 
-            // Club.ManagerId → User (1:N)
+            builder.Property(c => c.ManagerId)
+                   .IsRequired();
+
+            // Manager (User) → Club (1:N)
             builder.HasOne(c => c.Manager)
-                   .WithMany() // Managers do not need navigation for all clubs
+                   .WithMany()                    // User tarafında koleksiyon tutmuyoruz
                    .HasForeignKey(c => c.ManagerId)
                    .OnDelete(DeleteBehavior.Restrict);
-            // Restrict: Manager silinirse kulübe dokunmasın!
+            // Restrict → Manager silinirse Club silinmez ve hata verir
+
+            // ClubMembership ilişkisi
+            builder.HasMany(c => c.Memberships)
+                   .WithOne(cm => cm.Club)
+                   .HasForeignKey(cm => cm.ClubId)
+                   .OnDelete(DeleteBehavior.Cascade);
+            // Club silinirse tüm üyelikler silinsin
         }
     }
 }

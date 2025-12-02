@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repositories.EFCore;
 
@@ -11,9 +12,11 @@ using Repositories.EFCore;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20251202094115_SeedAdminUser")]
+    partial class SeedAdminUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -290,7 +293,7 @@ namespace WebApi.Migrations
                         {
                             Id = "admin-seed-001",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "fe659a52-8163-4a12-8533-3cab62cb507c",
+                            ConcurrencyStamp = "25f608a5-bb5f-4936-b59c-0bb0e8996b4d",
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "admin@clubapp.com",
                             EmailConfirmed = true,
@@ -299,9 +302,9 @@ namespace WebApi.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@CLUBAPP.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEvnFaaFkfyh/vY0bdM5e9gfyImVl5uLFaOf5kBo+4FwUTzTaBfoSej1b0hIlWfosA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMbvjbUKTIJOhDaiEjuj5h95KLGoqVtwfvPETJw0XEqrVJI9r3lOMcwQxkFqEAyUwA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "2ceddaf9-477c-4789-a3aa-509f29f76a3c",
+                            SecurityStamp = "1e80e00b-83a2-4acf-a661-619ccdb59a88",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });

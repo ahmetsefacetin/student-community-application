@@ -14,7 +14,7 @@ namespace Repositories.EFCore
         public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
         public DbSet<Club> Clubs => Set<Club>();
         public DbSet<ClubMembership> ClubMemberships => Set<ClubMembership>();
-
+        public DbSet<ClubRoleDefinition> ClubRoleDefinitions => Set<ClubRoleDefinition>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -26,7 +26,11 @@ namespace Repositories.EFCore
             modelBuilder.ApplyConfiguration(new RefreshTokenConfiguration());
             modelBuilder.ApplyConfiguration(new ClubConfiguration());
             modelBuilder.ApplyConfiguration(new ClubMembershipConfiguration());
-
+            modelBuilder.ApplyConfiguration(new ClubRoleDefinitionConfiguration());
+            
+            // Admin seed configuration'larını ekle
+            modelBuilder.ApplyConfiguration(new AdminUserSeedConfiguration());
+            modelBuilder.ApplyConfiguration(new AdminRoleAssignmentConfiguration());
         }
     }
 }

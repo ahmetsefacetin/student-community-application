@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repositories.EFCore;
 
@@ -11,9 +12,11 @@ using Repositories.EFCore;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20251202090456_clubRoles")]
+    partial class clubRoles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,10 +65,13 @@ namespace WebApi.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("JoinedAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -122,7 +128,7 @@ namespace WebApi.Migrations
                         new
                         {
                             Id = 2,
-                            Description = "Club officer with additional permissions.",
+                            Description = "Authorized to manage club events and members.",
                             DisplayName = "Club Officer",
                             RoleName = "Officer",
                             RoleValue = 2
@@ -130,7 +136,7 @@ namespace WebApi.Migrations
                         new
                         {
                             Id = 3,
-                            Description = "Full control of the club.",
+                            Description = "The main manager of the club with full permissions.",
                             DisplayName = "Club Manager",
                             RoleName = "Manager",
                             RoleValue = 3
@@ -284,27 +290,6 @@ namespace WebApi.Migrations
                         .HasFilter("[UserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "admin-seed-001",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "fe659a52-8163-4a12-8533-3cab62cb507c",
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Email = "admin@clubapp.com",
-                            EmailConfirmed = true,
-                            FirstName = "System",
-                            LastName = "Administrator",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@CLUBAPP.COM",
-                            NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEvnFaaFkfyh/vY0bdM5e9gfyImVl5uLFaOf5kBo+4FwUTzTaBfoSej1b0hIlWfosA==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "2ceddaf9-477c-4789-a3aa-509f29f76a3c",
-                            TwoFactorEnabled = false,
-                            UserName = "admin"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -439,13 +424,6 @@ namespace WebApi.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "admin-seed-001",
-                            RoleId = "1"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>

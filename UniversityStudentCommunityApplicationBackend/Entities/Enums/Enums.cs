@@ -8,8 +8,8 @@ namespace Entities.Enums
 {
     public enum ClubRole
     {
-        Member = 0,
-        Officer = 1,
-        Manager = 2
+        Member = 1,
+        Officer = 2,
+        Manager = 3
     }
 }

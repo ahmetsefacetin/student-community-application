@@ -12,30 +12,25 @@ namespace Repositories.Config
 
             builder.HasKey(cm => cm.Id);
 
-            // Unique constraint: a user can join a club only once
+            // Unique constraint: user can join a club once
             builder.HasIndex(cm => new { cm.ClubId, cm.UserId })
-                   .IsUnique();
+                .IsUnique();
 
-            // Store enum as string (IMPORTANT)
+            // ⭐ EF Enum -> int map’ler
             builder.Property(cm => cm.Role)
-                   .HasConversion<string>()     // <— İŞTE EN ÖNEMLİ KISIM
-                   .IsRequired();
+                .IsRequired()
+                .HasConversion<int>();
 
-            builder.Property(cm => cm.JoinedAt)
-                   .IsRequired()
-                   .HasDefaultValueSql("GETUTCDATE()");
-
-            // Relationship: ClubMembership → Club (N:1)
+            // Relationships
             builder.HasOne(cm => cm.Club)
-                   .WithMany(c => c.Memberships)
-                   .HasForeignKey(cm => cm.ClubId)
-                   .OnDelete(DeleteBehavior.Cascade);
+                .WithMany(c => c.Memberships)
+                .HasForeignKey(cm => cm.ClubId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            // Relationship: ClubMembership → User (N:1)
             builder.HasOne(cm => cm.User)
-                   .WithMany() // User → Memberships koleksiyonuna ihtiyaç yoksa
-                   .HasForeignKey(cm => cm.UserId)
-                   .OnDelete(DeleteBehavior.Cascade);
+                .WithMany()
+                .HasForeignKey(cm => cm.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

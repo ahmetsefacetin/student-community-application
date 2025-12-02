@@ -1,9 +1,8 @@
 ﻿using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Contracts;
-using Repositories.EFCore;
 
-namespace Repositories.Config
+namespace Repositories.EFCore
 {
     public class ClubRepository : IClubRepository
     {
