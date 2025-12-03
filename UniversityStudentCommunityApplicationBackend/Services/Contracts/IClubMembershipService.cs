@@ -8,5 +8,7 @@ namespace Services.Contracts
         Task RemoveMemberAsync(RemoveMemberDto dto);
         Task UpdateMemberRoleAsync(UpdateMemberRoleDto dto);
         Task<IEnumerable<ClubMemberResponseDto>> GetMembersAsync(int clubId);
+        Task<UserClubRoleDto> GetUserClubRoleAsync(int clubId, string userId);
+
     }
 }

@@ -2,6 +2,7 @@ using Entities.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
+using System.Security.Claims;
 
 namespace Presentation.Controllers
 {
@@ -10,10 +11,13 @@ namespace Presentation.Controllers
     public class ClubController : ControllerBase
     {
         private readonly IClubService _clubService;
+        private readonly IClubMembershipService _membershipService;
 
-        public ClubController(IClubService clubService)
+
+        public ClubController(IClubService clubService, IClubMembershipService membershipService)
         {
             _clubService = clubService;
+            _membershipService = membershipService;
         }
 
         //  SADECE ADMIN KULÜP OLUÞTURABÝLÝR
@@ -43,13 +47,30 @@ namespace Presentation.Controllers
             return Ok(club);
         }
 
-        //  SADECE ADMIN KULÜP GÜNCELLEYEBÝLÝR (veya Manager'a da izin verilebilir)
+
         [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")] // veya "Admin"
+        [Authorize] 
         public async Task<IActionResult> UpdateClub(int id, [FromBody] UpdateClubDto dto)
         {
-            await _clubService.UpdateClubAsync(id, dto);
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(currentUserId))
+                return Unauthorized();
+
+            await _clubService.UpdateClubAsync(id, dto, currentUserId);
             return NoContent();
+        }
+
+        //  KULLANICININ KULÜP ROLÜNü GETIR
+        [HttpGet("{id}/membership")]
+        [Authorize]
+        public async Task<ActionResult<UserClubRoleDto>> GetUserClubRole(int id)
+        {
+            var userId = User.FindFirst("sub")?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+
+            var result = await _membershipService.GetUserClubRoleAsync(id, userId);
+            return Ok(result);
         }
 
         //  SADECE ADMIN KULÜP SÝLEBÝLÝR

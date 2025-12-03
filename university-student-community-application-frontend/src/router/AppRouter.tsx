@@ -5,6 +5,7 @@ import RegisterPage from "../pages/RegisterPage";
 import Layout from "../components/Layout"; // Import your Layout component
 import ProtectedRoute from "./ProtectedRoute"; // Import ProtectedRoute if you want to secure these pages
 import AdminCreateClubPage from "../pages/AdminCreateClubPage";
+import UpdateClubPage from "../pages/UpdateClubPage";
 
 const AppRouter = () => {
   return (
@@ -26,7 +27,7 @@ const AppRouter = () => {
         <Route element={<ProtectedRoute />}>
           {/* Protected routes go here */}
           {/* now there are no protected routes */}
-
+          <Route path="/clubs/:id/edit" element={<UpdateClubPage />} />
         </Route>
 
       </Route>

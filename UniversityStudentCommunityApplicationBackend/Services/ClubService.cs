@@ -76,12 +76,9 @@ namespace Services
             if (club == null)
                 throw new NotFoundException("Club not found.");
 
-            var members = club.Memberships.Select(m => new ClubMemberDto
-            {
-                UserId = m.UserId,
-                FullName = $"{m.User.FirstName} {m.User.LastName}",
-                Role = m.Role.ToString()
-            }).ToList();
+            var manager = await _userManager.FindByIdAsync(club.ManagerId);
+            if (manager == null)
+                throw new NotFoundException("Manager user not found.");
 
             return new ClubResponseDto
             {
@@ -89,7 +86,7 @@ namespace Services
                 Name = club.Name,
                 Description = club.Description,
                 ManagerId = club.ManagerId,
-                ManagerFullName = club.Manager.FullName
+                ManagerFullName = manager.FullName
             };
         }
 
@@ -100,24 +97,54 @@ namespace Services
         {
             var clubs = await _clubRepository.GetAllClubsAsync(false);
 
-            return clubs.Select(c => new ClubResponseDto
+            var clubResponseList = new List<ClubResponseDto>();
+
+            foreach (var club in clubs)
             {
-                Id = c.Id,
-                Name = c.Name,
-                Description = c.Description,
-                ManagerId = c.ManagerId,
-                ManagerFullName = c.Manager.FullName
-            });
+                var manager = await _userManager.FindByIdAsync(club.ManagerId);
+                if (manager == null)
+                    throw new NotFoundException("Manager user not found.");
+
+                clubResponseList.Add(new ClubResponseDto
+                {
+                    Id = club.Id,
+                    Name = club.Name,
+                    Description = club.Description,
+                    ManagerId = club.ManagerId,
+                    ManagerFullName = manager.FullName
+                });
+            }
+
+            return clubResponseList;
         }
 
         // -------------------------------------------------------------
         // 4) UPDATE CLUB
         // -------------------------------------------------------------
-        public async Task UpdateClubAsync(int id, UpdateClubDto dto)
+        public async Task UpdateClubAsync(int id, UpdateClubDto dto, string currentUserId)
         {
             var club = await _clubRepository.GetClubByIdAsync(id, true);
             if (club == null)
                 throw new NotFoundException("Club not found.");
+
+            // Önce Identity rolünü kontrol et - Admin ise direkt izin ver
+            var user = await _userManager.FindByIdAsync(currentUserId);
+            if (user == null)
+                throw new NotFoundException("User not found.");
+
+            var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+            if (!isAdmin)
+            {
+                // Admin değilse, ClubMembership'ten kullanıcının rolünü kontrol et
+                var membership = await _membershipRepository.GetMembershipAsync(id, currentUserId, false);
+
+                if (membership == null)
+                    throw new UnauthorizedAccessException("You are not a member of this club.");
+
+                // Sadece Manager ve Officer güncelleyebilir
+                if (membership.Role != ClubRole.Manager && membership.Role != ClubRole.Officer)
+                    throw new UnauthorizedAccessException("Only club managers and officers can update the club.");
+            }
 
             club.Name = dto.Name;
             club.Description = dto.Description;

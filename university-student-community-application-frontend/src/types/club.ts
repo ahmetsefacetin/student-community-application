@@ -17,3 +17,8 @@ export interface ClubMemberDto {
   fullName: string;
   role: string; // "Manager" | "Officer" | "Member"
 }
+
+export interface UpdateClubDto {
+  name: string;
+  description?: string | null;
+}

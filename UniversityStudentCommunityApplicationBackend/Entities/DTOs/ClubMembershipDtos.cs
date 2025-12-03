@@ -33,4 +33,9 @@ namespace Entities.DTOs
         public ClubRole Role { get; set; }
         public DateTime JoinedAt { get; set; }
     }
+
+    public class UserClubRoleDto
+    {
+        public string ClubRole { get; set; } = string.Empty;
+    }
 }

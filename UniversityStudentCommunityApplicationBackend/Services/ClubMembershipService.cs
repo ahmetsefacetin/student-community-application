@@ -120,5 +120,30 @@ namespace Services
 
             return mapped;
         }
+
+        // -----------------------
+        // GET USER CLUB ROLE
+        // -----------------------
+        public async Task<UserClubRoleDto> GetUserClubRoleAsync(int clubId, string userId)
+        {
+            var club = await _clubRepo.GetClubByIdAsync(clubId, false)
+                       ?? throw new NotFoundException("Club not found");
+
+            // Kullanıcı manager mı kontrol et
+            if (club.ManagerId == userId)
+            {
+                return new UserClubRoleDto { ClubRole = ClubRole.Manager.ToString() };
+            }
+
+            // ClubMembership'ten rolü al
+            var membership = await _membershipRepo.GetMembershipAsync(clubId, userId, false);
+
+            if (membership == null)
+            {
+                return new UserClubRoleDto { ClubRole = "None" }; // Kulüp üyesi değil
+            }
+
+            return new UserClubRoleDto { ClubRole = membership.Role.ToString() };
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace Services.Contracts
         Task<ClubResponseDto> CreateClubAsync(CreateClubDto dto);
         Task<IEnumerable<ClubResponseDto>> GetAllClubsAsync();
         Task<ClubResponseDto> GetClubByIdAsync(int id);
-        Task UpdateClubAsync(int id, UpdateClubDto dto);
+        Task UpdateClubAsync(int id, UpdateClubDto dto, string currentUserId);
         Task DeleteClubAsync(int id);
     }
 }
