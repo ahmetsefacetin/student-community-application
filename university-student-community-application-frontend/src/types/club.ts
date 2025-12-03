@@ -22,3 +22,7 @@ export interface UpdateClubDto {
   name: string;
   description?: string | null;
 }
+
+export interface UserClubRoleDto {
+  clubRole: string; // Manager | Officer | Member | None
+}
