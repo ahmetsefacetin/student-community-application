@@ -26,8 +26,7 @@ const Navbar: React.FC = () => {
       boxSizing: 'border-box'
     }}>
       <div className="nav-links">
-        {/* <Link to="/" style={{ marginRight: '1rem' }}>Home</Link> */}
-        {/* Add other navigation links here */}
+        <button onClick={() => navigate('/')}>Anasayfa</button>
       </div>
 
       <div style={{ display: 'flex', gap: '10px' }}>
