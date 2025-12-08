@@ -47,6 +47,14 @@ namespace Presentation.Controllers
             return Ok(club);
         }
 
+        [HttpGet("{id}/members")]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<ClubMemberDto>>> GetClubMembers(int id)
+        {
+            var members = await _membershipService.GetMembersAsync(id);
+            return Ok(members);
+        }
+
 
         [HttpPut("{id}")]
         [Authorize] 
