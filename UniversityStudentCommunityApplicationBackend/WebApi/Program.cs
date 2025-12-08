@@ -40,6 +40,7 @@ builder.Services.AddScoped<ISystemMessageService, SystemMessageService>();
 builder.Services.AddScoped<JwtTokenService>();
 builder.Services.AddScoped<IClubService, ClubService>();
 builder.Services.AddScoped<IClubMembershipService, ClubMembershipService>();
+builder.Services.AddScoped<IClubRolesService, ClubRolesService>();
 
 
 builder.Services.AddIdentity<User, IdentityRole>(options =>

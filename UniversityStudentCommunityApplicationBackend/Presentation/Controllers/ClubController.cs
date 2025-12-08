@@ -60,18 +60,6 @@ namespace Presentation.Controllers
             return NoContent();
         }
 
-        //  KULLANICININ KULÜP ROLÜNü GETIR
-        [HttpGet("{id}/membership")]
-        [Authorize]
-        public async Task<ActionResult<UserClubRoleDto>> GetUserClubRole(int id)
-        {
-            var userId = User.FindFirst("sub")?.Value;
-            if (string.IsNullOrEmpty(userId))
-                return Unauthorized();
-
-            var result = await _membershipService.GetUserClubRoleAsync(id, userId);
-            return Ok(result);
-        }
 
         //  SADECE ADMIN KULÜP SÝLEBÝLÝR
         [HttpDelete("{id}")]

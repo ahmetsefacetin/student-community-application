@@ -17,7 +17,7 @@ export const clubService = {
   },
 
   async getUserClubRole(clubId: number): Promise<UserClubRoleDto> {
-    const response = await apiClient.get<UserClubRoleDto>(`/Club/${clubId}/membership`);
+    const response = await apiClient.get<UserClubRoleDto>(`/ClubRoles/${clubId}/membership`);
     return response.data;
   }
 };
