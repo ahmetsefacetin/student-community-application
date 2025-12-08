@@ -20,5 +20,4 @@ export const clubService = {
     const response = await apiClient.get<UserClubRoleDto>(`/ClubRoles/${clubId}/membership`);
     return response.data;
   }
-};
-
+}
