@@ -17,13 +17,16 @@ namespace Services
     {
         private readonly IClubRepository _clubRepo;
         private readonly IClubMembershipRepository _membershipRepo;
+        private readonly IUnitOfWork _unitOfWork;
 
         public ClubRolesService(
             IClubRepository clubRepo,
-            IClubMembershipRepository membershipRepo)
+            IClubMembershipRepository membershipRepo,
+            IUnitOfWork unitOfWork)
         {
             _clubRepo = clubRepo;
             _membershipRepo = membershipRepo;
+            _unitOfWork = unitOfWork;
         }
 
         // -----------------------
@@ -51,11 +54,11 @@ namespace Services
             return new UserClubRoleDto { ClubRole = membership.Role.ToString() };
         }
 
-        public async Task MakeMemberOfficerAsync(int clubId, int userId, string currentUserId)
+        public async Task MakeMemberOfficerAsync(int clubId, string userId, string currentUserId)
         {
             UserClubRoleDto userRole;
             try {
-                userRole = await GetUserClubRoleAsync(clubId, userId.ToString());
+                userRole = await GetUserClubRoleAsync(clubId, userId);
             }
             catch(NotFoundException)
             {
@@ -69,16 +72,17 @@ namespace Services
             {
                 throw new InvalidOperationException("Only members can be promoted to officers.");
             }
-            ClubMembership membership = await _membershipRepo.GetMembershipAsync(clubId, userId.ToString(), false)!;
+            ClubMembership membership = await _membershipRepo.GetMembershipAsync(clubId, userId, false)!;
             membership.Role = ClubRole.Officer;
             _membershipRepo.UpdateMembership(membership);
+            await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task DemoteOfficerAsync(int clubId, int userId, string currentUserId)
+        public async Task DemoteOfficerAsync(int clubId, string userId, string currentUserId)
         {
             UserClubRoleDto userRole;
             try {
-                userRole = await GetUserClubRoleAsync(clubId, userId.ToString());
+                userRole = await GetUserClubRoleAsync(clubId, userId);
             }
             catch(NotFoundException)
             {
@@ -92,9 +96,10 @@ namespace Services
             {
                 throw new InvalidOperationException("User is not an officer.");
             }
-            ClubMembership membership = await _membershipRepo.GetMembershipAsync(clubId, userId.ToString(), false)!;
+            ClubMembership membership = await _membershipRepo.GetMembershipAsync(clubId, userId, false)!;
             membership.Role = ClubRole.Member;
             _membershipRepo.UpdateMembership(membership);
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

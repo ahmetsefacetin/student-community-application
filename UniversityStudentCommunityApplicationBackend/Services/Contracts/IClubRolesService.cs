@@ -10,8 +10,8 @@ namespace Services.Contracts
     public interface IClubRolesService
     {
         Task<UserClubRoleDto> GetUserClubRoleAsync(int clubId, string userId);
-        Task MakeMemberOfficerAsync(int clubId, int userId, string currentUserId);
-        Task DemoteOfficerAsync(int clubId, int userId, string currentUserId);
+        Task MakeMemberOfficerAsync(int clubId, string userId, string currentUserId);
+        Task DemoteOfficerAsync(int clubId, string userId, string currentUserId);
 
     }
 }

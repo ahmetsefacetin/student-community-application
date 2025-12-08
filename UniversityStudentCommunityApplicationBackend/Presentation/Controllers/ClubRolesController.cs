@@ -1,4 +1,5 @@
 ﻿using Entities.DTOs;
+using Entities.Enums;
 using Entities.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -40,14 +41,20 @@ namespace Presentation.Controllers
 
         [HttpPut("{clubId}/make-officer/{userId}")]
         [Authorize]
-        public async Task<IActionResult> MakeMemberOfficer(int clubId, int userId)
+        public async Task<IActionResult> MakeMemberOfficer(int clubId, string userId)
         {
-            var userRole = await GetUserClubRole(clubId);
-            if (userRole.Value.ClubRole != "Manager")
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+
+            var result = await _clubRolesService.GetUserClubRoleAsync(clubId, currentUserId);
+
+            var userRole = result.ClubRole;
+            if (userRole != ClubRole.Manager.ToString())
             {
                 return Forbid();
             }
-            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+
             try
             {
                 await _clubRolesService.MakeMemberOfficerAsync(clubId, userId, currentUserId);
@@ -69,17 +76,23 @@ namespace Presentation.Controllers
 
         [HttpPut("{clubId}/demote-officer/{userId}")]
         [Authorize]
-        public async Task<IActionResult> DemoteOfficer(int clubId, int UserId)
+        public async Task<IActionResult> DemoteOfficer(int clubId, string userId)
         {
-            var userRole = await GetUserClubRole(clubId);
-            if (userRole.Value.ClubRole != "Manager")
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+
+            var result = await _clubRolesService.GetUserClubRoleAsync(clubId, currentUserId);
+
+            var userRole = result.ClubRole;
+            if (userRole != ClubRole.Manager.ToString())
             {
                 return Forbid();
             }
-            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+
             try
             {
-                await _clubRolesService.DemoteOfficerAsync(clubId, UserId, currentUserId);
+                await _clubRolesService.DemoteOfficerAsync(clubId, userId, currentUserId);
             }
             catch (NotFoundException ex)
             {

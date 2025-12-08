@@ -15,7 +15,7 @@ export interface ClubResponseDto {
 export interface ClubMemberDto {
   userId: string;
   fullName: string;
-  role: string; // "Manager" | "Officer" | "Member"
+  role: number; // "Manager" | "Officer" | "Member"
 }
 
 export interface UpdateClubDto {
@@ -25,4 +25,10 @@ export interface UpdateClubDto {
 
 export interface UserClubRoleDto {
   clubRole: string; // Manager | Officer | Member | None
+}
+
+export const ClubRole = {
+  Member: 1,
+  Officer: 2,
+  Manager: 3
 }

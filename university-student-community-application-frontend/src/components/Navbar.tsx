@@ -5,6 +5,7 @@ import { useAuth } from '../hooks/useAuth';
 const Navbar: React.FC = () => {
   const { logout, isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
+  
 
   const handleLogout = () => {
     logout();

@@ -1,5 +1,5 @@
 import apiClient from "./apiClient";
-import type { CreateClubDto, ClubResponseDto, UpdateClubDto, UserClubRoleDto } from "../types/club";
+import type { CreateClubDto, ClubResponseDto, UpdateClubDto, UserClubRoleDto, ClubMemberDto } from "../types/club";
 
 export const clubService = {
   async createClub(dto: CreateClubDto): Promise<ClubResponseDto> {
@@ -24,5 +24,21 @@ export const clubService = {
   async getAllClubs(): Promise<ClubResponseDto[]> {
     const response = await apiClient.get<ClubResponseDto[]>("/Club");
     return response.data;
+  },
+
+  async getMembers(clubId: number): Promise<ClubMemberDto[]> {
+    const response = await apiClient.get<ClubMemberDto[]>(
+      `/Club/${clubId}/members`
+    );
+    return response.data;
+  },
+
+  async makeOfficer(clubId: number, userId: string): Promise<void> {
+    await apiClient.put(`/ClubRoles/${clubId}/make-officer/${userId}`);
+  },
+
+  // 🔹 PUT: Yetkili görevden al (Manager)
+  async demoteOfficer(clubId: number, userId: string): Promise<void> {
+    await apiClient.put(`/ClubRoles/${clubId}/demote-officer/${userId}`);
   }
 }

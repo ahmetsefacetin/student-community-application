@@ -31,6 +31,9 @@ namespace Repositories.EFCore
             // Admin seed configuration'larını ekle
             modelBuilder.ApplyConfiguration(new AdminUserSeedConfiguration());
             modelBuilder.ApplyConfiguration(new AdminRoleAssignmentConfiguration());
+
+            // Club member seed configuration'larını ekle
+            modelBuilder.ApplyConfiguration(new ClubMemberSeedConfiguration());
         }
     }
 }

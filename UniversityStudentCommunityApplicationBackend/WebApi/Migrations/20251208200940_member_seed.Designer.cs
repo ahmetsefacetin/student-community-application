@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repositories.EFCore;
 
@@ -11,9 +12,11 @@ using Repositories.EFCore;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20251208200940_member_seed")]
+    partial class member_seed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -82,16 +85,6 @@ namespace WebApi.Migrations
                         .IsUnique();
 
                     b.ToTable("ClubMemberships", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 99999,
-                            ClubId = 1,
-                            JoinedAt = new DateTime(2025, 12, 8, 20, 13, 40, 957, DateTimeKind.Utc).AddTicks(1140),
-                            Role = 1,
-                            UserId = "5342e9a1-4ba0-424a-ad00-e4a5d482f272"
-                        });
                 });
 
             modelBuilder.Entity("Entities.Models.ClubRoleDefinition", b =>
@@ -303,7 +296,7 @@ namespace WebApi.Migrations
                         {
                             Id = "admin-seed-001",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3df8917a-c622-40c2-97de-01389562b614",
+                            ConcurrencyStamp = "d958c6e5-a2fc-48ca-a5c3-7bcc77eab25b",
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "admin@clubapp.com",
                             EmailConfirmed = true,
@@ -312,9 +305,9 @@ namespace WebApi.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@CLUBAPP.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEIPEToyNLyFlrEVAWMxngVb17yLZeL2OOKi1n+n4mHjjXIWuuiTTO2R/WAEHOblY5Q==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEK/CDne0LekCnEfxWWK3Lp2yLHgRUgOTxE9o3Rb1vuYh5iy3ha7QEat6mWZrR/fHAw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "d38aed13-8865-4faa-8296-f01e362c8aba",
+                            SecurityStamp = "c7bfb041-d327-48c2-bb8d-8fa9351ed645",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
