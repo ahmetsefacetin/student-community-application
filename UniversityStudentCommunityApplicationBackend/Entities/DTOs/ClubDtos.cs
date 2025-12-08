@@ -49,4 +49,10 @@ namespace Entities.DTOs
         public string ManagerId { get; set; } = string.Empty;
         public string ManagerFullName { get; set; } = string.Empty;
     }
+
+    public class OfficerActionsDto
+    {
+        public int ClubId { get; set; }
+        public string? UserId { get; set; } 
+    }
 }

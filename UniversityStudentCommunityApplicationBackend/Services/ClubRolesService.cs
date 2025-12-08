@@ -51,11 +51,11 @@ namespace Services
             return new UserClubRoleDto { ClubRole = membership.Role.ToString() };
         }
 
-        public async Task MakeMemberOfficerAsync(int clubId, int userId, string currentUserId)
+        public async Task MakeMemberOfficerAsync(OfficerActionsDto officerActionsDto)
         {
             UserClubRoleDto userRole;
             try {
-                userRole = await GetUserClubRoleAsync(clubId, userId.ToString());
+                userRole = await GetUserClubRoleAsync(officerActionsDto.ClubId, officerActionsDto.UserId);
             }
             catch(NotFoundException)
             {
@@ -69,16 +69,16 @@ namespace Services
             {
                 throw new InvalidOperationException("Only members can be promoted to officers.");
             }
-            ClubMembership membership = await _membershipRepo.GetMembershipAsync(clubId, userId.ToString(), false)!;
+            ClubMembership membership = await _membershipRepo.GetMembershipAsync(officerActionsDto.ClubId, officerActionsDto.UserId, false)!;
             membership.Role = ClubRole.Officer;
             _membershipRepo.UpdateMembership(membership);
         }
 
-        public async Task DemoteOfficerAsync(int clubId, int userId, string currentUserId)
+        public async Task DemoteOfficerAsync(OfficerActionsDto officerActionsDto, string currentUserId)
         {
             UserClubRoleDto userRole;
             try {
-                userRole = await GetUserClubRoleAsync(clubId, userId.ToString());
+                userRole = await GetUserClubRoleAsync(officerActionsDto.ClubId, officerActionsDto.UserId);
             }
             catch(NotFoundException)
             {
@@ -92,7 +92,7 @@ namespace Services
             {
                 throw new InvalidOperationException("User is not an officer.");
             }
-            ClubMembership membership = await _membershipRepo.GetMembershipAsync(clubId, userId.ToString(), false)!;
+            ClubMembership membership = await _membershipRepo.GetMembershipAsync(officerActionsDto.ClubId, officerActionsDto.UserId, false)!;
             membership.Role = ClubRole.Member;
             _membershipRepo.UpdateMembership(membership);
         }
