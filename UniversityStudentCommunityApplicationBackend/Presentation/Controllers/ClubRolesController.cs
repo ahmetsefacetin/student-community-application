@@ -40,9 +40,9 @@ namespace Presentation.Controllers
 
         [HttpPut("{clubId}/make-officer/{userId}")]
         [Authorize]
-        public async Task<IActionResult> MakeMemberOfficer(OfficerActionsDto officerActionsDto)
+        public async Task<IActionResult> MakeMemberOfficer(int clubId, int userId)
         {
-            var userRole = await GetUserClubRole(officerActionsDto.ClubId);
+            var userRole = await GetUserClubRole(clubId);
             if (userRole.Value.ClubRole != "Manager")
             {
                 return Forbid();
@@ -50,7 +50,7 @@ namespace Presentation.Controllers
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
             try
             {
-                await _clubRolesService.MakeMemberOfficerAsync(officerActionsDto);
+                await _clubRolesService.MakeMemberOfficerAsync(clubId, userId, currentUserId);
             }
             catch (NotFoundException ex)
             {
@@ -69,9 +69,9 @@ namespace Presentation.Controllers
 
         [HttpPut("{clubId}/demote-officer/{userId}")]
         [Authorize]
-        public async Task<IActionResult> DemoteOfficer(OfficerActionsDto officerActionsDto)
+        public async Task<IActionResult> DemoteOfficer(int clubId, int UserId)
         {
-            var userRole = await GetUserClubRole(officerActionsDto.ClubId);
+            var userRole = await GetUserClubRole(clubId);
             if (userRole.Value.ClubRole != "Manager")
             {
                 return Forbid();
@@ -79,7 +79,7 @@ namespace Presentation.Controllers
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
             try
             {
-                await _clubRolesService.DemoteOfficerAsync(officerActionsDto, currentUserId);
+                await _clubRolesService.DemoteOfficerAsync(clubId, UserId, currentUserId);
             }
             catch (NotFoundException ex)
             {
