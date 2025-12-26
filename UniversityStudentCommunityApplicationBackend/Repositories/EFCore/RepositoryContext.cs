@@ -15,6 +15,7 @@ namespace Repositories.EFCore
         public DbSet<Club> Clubs => Set<Club>();
         public DbSet<ClubMembership> ClubMemberships => Set<ClubMembership>();
         public DbSet<ClubRoleDefinition> ClubRoleDefinitions => Set<ClubRoleDefinition>();
+        public DbSet<ClubEvent> ClubEvents => Set<ClubEvent>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -27,6 +28,7 @@ namespace Repositories.EFCore
             modelBuilder.ApplyConfiguration(new ClubConfiguration());
             modelBuilder.ApplyConfiguration(new ClubMembershipConfiguration());
             modelBuilder.ApplyConfiguration(new ClubRoleDefinitionConfiguration());
+            modelBuilder.ApplyConfiguration(new ClubEventConfiguration());
             
             // Admin seed configuration'larını ekle
             modelBuilder.ApplyConfiguration(new AdminUserSeedConfiguration());

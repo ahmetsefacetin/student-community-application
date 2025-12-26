@@ -37,6 +37,14 @@ namespace Repositories.EFCore
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
+        public async Task<Club?> GetClubWithEventsAsync(int id, bool trackChanges)
+        {
+            return await (trackChanges
+                ? _context.Clubs.Include(c => c.Events)
+                : _context.Clubs.Include(c => c.Events).AsNoTracking())
+                .FirstOrDefaultAsync(c => c.Id == id);
+        }
+
         public void CreateClub(Club club) => _context.Clubs.Add(club);
 
         public void DeleteClub(Club club) => _context.Clubs.Remove(club);

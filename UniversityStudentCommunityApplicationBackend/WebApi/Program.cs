@@ -27,13 +27,13 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<RepositoryContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ISystemMessageRepository, SystemMessageRepository>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<IClubRepository, ClubRepository>();
 builder.Services.AddScoped<IClubMembershipRepository, ClubMembershipRepository>();
 builder.Services.AddScoped<IClubRoleDefinitionRepository, ClubRoleDefinitionRepository>();
+builder.Services.AddScoped<IClubEventRepository, ClubEventRepository>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ISystemMessageService, SystemMessageService>();
@@ -41,7 +41,7 @@ builder.Services.AddScoped<JwtTokenService>();
 builder.Services.AddScoped<IClubService, ClubService>();
 builder.Services.AddScoped<IClubMembershipService, ClubMembershipService>();
 builder.Services.AddScoped<IClubRolesService, ClubRolesService>();
-
+builder.Services.AddScoped<IClubEventService, ClubEventService>();
 
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
@@ -65,7 +65,6 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 .AddRoleManager<RoleManager<IdentityRole>>()
 .AddDefaultTokenProviders();
 
-
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -82,13 +81,12 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ClockSkew = TimeSpan.Zero, // token expiration tam zamanda geçersiz olur
+        ClockSkew = TimeSpan.Zero,
         ValidIssuer = jwtSection["Issuer"],
         ValidAudience = jwtSection["Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(key)
     };
 });
-
 
 builder.Services.AddCors(options =>
 {
@@ -100,7 +98,6 @@ builder.Services.AddCors(options =>
                   .AllowAnyMethod();
         });
 });
-
 
 var app = builder.Build();
 

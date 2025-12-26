@@ -7,6 +7,7 @@ namespace Repositories.Contracts
         Task<IEnumerable<Club>> GetAllClubsAsync(bool trackChanges);
         Task<Club?> GetClubByIdAsync(int id, bool trackChanges);
         Task<Club?> GetClubWithMembersAsync(int id, bool trackChanges);
+        Task<Club?> GetClubWithEventsAsync(int id, bool trackChanges);
         void CreateClub(Club club);
         void DeleteClub(Club club);
         void UpdateClub(Club club);
