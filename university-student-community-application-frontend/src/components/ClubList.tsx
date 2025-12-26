@@ -12,6 +12,24 @@ const ClubList = () => {
 
   const [error, setError] = useState("");
 
+  const handleJoin = async (clubId: number) => {
+    try {
+      await clubService.joinClub(clubId);
+      setRoles((prev) => ({ ...prev, [clubId]: "Member" }));
+    } catch {
+      setError("Kulübe katılırken bir hata oluştu.");
+    }
+  };
+
+  const handleLeave = async (clubId: number) => {
+    try {
+      await clubService.leaveClub(clubId);
+      setRoles((prev) => ({ ...prev, [clubId]: "None" }));
+    } catch {
+      setError("Kulüpten ayrılırken bir hata oluştu.");
+    }
+  };
+
   useEffect(() => {
     const load = async () => {
       try {
@@ -50,6 +68,8 @@ const ClubList = () => {
           key={club.id}
           club={club}
           role={isAuthenticated ? roles[club.id] : undefined}
+          onJoin={isAuthenticated ? handleJoin : undefined}
+          onLeave={isAuthenticated ? handleLeave : undefined}
         />
       ))}
     </div>

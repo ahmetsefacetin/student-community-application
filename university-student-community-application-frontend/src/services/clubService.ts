@@ -33,6 +33,14 @@ export const clubService = {
     return response.data;
   },
 
+  async joinClub(clubId: number): Promise<void> {
+    await apiClient.post(`/Club/${clubId}/join`);
+  },
+
+  async leaveClub(clubId: number): Promise<void> {
+    await apiClient.delete(`/Club/${clubId}/leave`);
+  },
+
   async makeOfficer(clubId: number, userId: string): Promise<void> {
     await apiClient.put(`/ClubRoles/${clubId}/make-officer/${userId}`);
   },

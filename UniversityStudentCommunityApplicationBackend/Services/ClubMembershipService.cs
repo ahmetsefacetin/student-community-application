@@ -121,5 +121,26 @@ namespace Services
             return mapped;
         }
 
+        // -----------------------
+        // SELF JOIN / LEAVE
+        // -----------------------
+        public async Task JoinClubAsync(int clubId, string userId)
+        {
+            await AddMemberAsync(new AddMemberDto
+            {
+                ClubId = clubId,
+                UserId = userId
+            });
+        }
+
+        public async Task LeaveClubAsync(int clubId, string userId)
+        {
+            await RemoveMemberAsync(new RemoveMemberDto
+            {
+                ClubId = clubId,
+                UserId = userId
+            });
+        }
+
     }
 }

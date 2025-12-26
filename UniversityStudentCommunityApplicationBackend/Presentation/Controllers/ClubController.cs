@@ -13,14 +13,12 @@ namespace Presentation.Controllers
         private readonly IClubService _clubService;
         private readonly IClubMembershipService _membershipService;
 
-
         public ClubController(IClubService clubService, IClubMembershipService membershipService)
         {
             _clubService = clubService;
             _membershipService = membershipService;
         }
 
-        //  SADECE ADMIN KULÜP OLUÞTURABÝLÝR
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<ClubResponseDto>> CreateClub([FromBody] CreateClubDto dto)
@@ -29,18 +27,16 @@ namespace Presentation.Controllers
             return CreatedAtAction(nameof(GetClubById), new { id = result.Id }, result);
         }
 
-        //  TÜM KULLANICILAR KULÜPLERÝ GÖREBÝLÝR (veya [Authorize] ile sadece login olanlar)
         [HttpGet]
-        [AllowAnonymous] // veya [Authorize] - ihtiyaca göre
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<ClubResponseDto>>> GetAllClubs()
         {
             var clubs = await _clubService.GetAllClubsAsync();
             return Ok(clubs);
         }
 
-        //  KULÜP DETAYI
         [HttpGet("{id}")]
-        [AllowAnonymous] // veya [Authorize]
+        [AllowAnonymous]
         public async Task<ActionResult<ClubResponseDto>> GetClubById(int id)
         {
             var club = await _clubService.GetClubByIdAsync(id);
@@ -55,9 +51,32 @@ namespace Presentation.Controllers
             return Ok(members);
         }
 
+        [HttpPost("{id}/join")]
+        [Authorize]
+        public async Task<IActionResult> JoinClub(int id)
+        {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(currentUserId))
+                return Unauthorized();
+
+            await _membershipService.JoinClubAsync(id, currentUserId);
+            return NoContent();
+        }
+
+        [HttpDelete("{id}/leave")]
+        [Authorize]
+        public async Task<IActionResult> LeaveClub(int id)
+        {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(currentUserId))
+                return Unauthorized();
+
+            await _membershipService.LeaveClubAsync(id, currentUserId);
+            return NoContent();
+        }
 
         [HttpPut("{id}")]
-        [Authorize] 
+        [Authorize]
         public async Task<IActionResult> UpdateClub(int id, [FromBody] UpdateClubDto dto)
         {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -68,8 +87,6 @@ namespace Presentation.Controllers
             return NoContent();
         }
 
-
-        //  SADECE ADMIN KULÜP SÝLEBÝLÝR
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteClub(int id)

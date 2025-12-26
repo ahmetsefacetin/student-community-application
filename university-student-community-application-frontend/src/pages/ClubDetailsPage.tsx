@@ -10,6 +10,8 @@ const ClubDetailsPage = () => {
   const [members, setMembers] = useState<ClubMemberDto[]>([]);
   const [role, setRole] = useState<string>(""); // Manager / Officer / Member
   const [loading, setLoading] = useState(true);
+  const [actionLoading, setActionLoading] = useState(false);
+  const [actionError, setActionError] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,6 +54,38 @@ const ClubDetailsPage = () => {
     setMembers(updated);
   };
 
+  const joinClub = async () => {
+    if (!id) return;
+    setActionError("");
+    try {
+      setActionLoading(true);
+      await clubService.joinClub(Number(id));
+      setRole("Member");
+      const updated = await clubService.getMembers(Number(id));
+      setMembers(updated);
+    } catch (err: any) {
+      setActionError(err?.response?.data?.message ?? "Katılım sırasında bir hata oluştu.");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const leaveClub = async () => {
+    if (!id) return;
+    setActionError("");
+    try {
+      setActionLoading(true);
+      await clubService.leaveClub(Number(id));
+      setRole("None");
+      const updated = await clubService.getMembers(Number(id));
+      setMembers(updated);
+    } catch (err: any) {
+      setActionError(err?.response?.data?.message ?? "Ayrılma sırasında bir hata oluştu.");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   return (
     <div className="container mx-auto p-4">
 
@@ -80,6 +114,31 @@ const ClubDetailsPage = () => {
                 )}
           </div>
         )}
+
+        {actionError && (
+          <p className="text-red-600 text-sm mt-2">{actionError}</p>
+        )}
+
+        <div className="flex gap-3 mt-4">
+          {role === "None" && (
+            <button
+              disabled={actionLoading}
+              onClick={joinClub}
+              className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-70"
+            >
+              {actionLoading ? "Katılıyor..." : "Katıl"}
+            </button>
+          )}
+          {(role === "Member" || role === "Officer") && (
+            <button
+              disabled={actionLoading}
+              onClick={leaveClub}
+              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-70"
+            >
+              {actionLoading ? "Ayrılıyor..." : "Ayrıl"}
+            </button>
+          )}
+        </div>
 
         {/* Update Club Button - Only for Manager and Officer */}
         {(role === "Manager" || role === "Officer") && (

@@ -5,10 +5,63 @@ import { useNavigate } from "react-router-dom";
 interface Props {
     club: ClubResponseDto;
     role?: string; // Manager | Officer | Member | None
+    onJoin?: (clubId: number) => void | Promise<void>;
+    onLeave?: (clubId: number) => void | Promise<void>;
 }
 
-const ClubCard: FC<Props> = ({ club, role }) => {
+const ClubCard: FC<Props> = ({ club, role, onJoin, onLeave }) => {
     const navigate = useNavigate();
+
+    const renderAction = () => {
+        if (!role) return null; // anonymous view
+        if (role === "Manager") return null;
+
+        if (role === "None") {
+            return (
+                <button
+                    onClick={() => onJoin?.(club.id)}
+                    style={{
+                        padding: "0.6rem 1.4rem",
+                        background: "#38a169",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "6px",
+                        fontWeight: 600,
+                        fontSize: "1rem",
+                        cursor: "pointer",
+                        boxShadow: "0 1px 4px rgba(56,161,105,0.15)",
+                        transition: "background 0.2s",
+                    }}
+                    onMouseOver={e => (e.currentTarget.style.background = "#2f855a")}
+                    onMouseOut={e => (e.currentTarget.style.background = "#38a169")}
+                >
+                    Katıl
+                </button>
+            );
+        }
+
+        return (
+            <button
+                onClick={() => onLeave?.(club.id)}
+                style={{
+                    padding: "0.6rem 1.4rem",
+                    background: "#e53e3e",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "6px",
+                    fontWeight: 600,
+                    fontSize: "1rem",
+                    cursor: "pointer",
+                    boxShadow: "0 1px 4px rgba(229,62,62,0.15)",
+                    transition: "background 0.2s",
+                }}
+                onMouseOver={e => (e.currentTarget.style.background = "#c53030")}
+                onMouseOut={e => (e.currentTarget.style.background = "#e53e3e")}
+            >
+                Ayrıl
+            </button>
+        );
+    };
 
     return (
         <div
@@ -68,25 +121,28 @@ const ClubCard: FC<Props> = ({ club, role }) => {
                 )}
             </div>
 
-            <button
-                onClick={() => navigate(`/clubs/${club.id}`)}
-                style={{
-                    padding: "0.6rem 1.4rem",
-                    background: "#3182ce",
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: "6px",
-                    fontWeight: 600,
-                    fontSize: "1rem",
-                    cursor: "pointer",
-                    boxShadow: "0 1px 4px rgba(49,130,206,0.12)",
-                    transition: "background 0.2s",
-                }}
-                onMouseOver={e => (e.currentTarget.style.background = "#2b6cb0")}
-                onMouseOut={e => (e.currentTarget.style.background = "#3182ce")}
-            >
-                Detay
-            </button>
+            <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
+                {renderAction()}
+                <button
+                    onClick={() => navigate(`/clubs/${club.id}`)}
+                    style={{
+                        padding: "0.6rem 1.4rem",
+                        background: "#3182ce",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "6px",
+                        fontWeight: 600,
+                        fontSize: "1rem",
+                        cursor: "pointer",
+                        boxShadow: "0 1px 4px rgba(49,130,206,0.12)",
+                        transition: "background 0.2s",
+                    }}
+                    onMouseOver={e => (e.currentTarget.style.background = "#2b6cb0")}
+                    onMouseOut={e => (e.currentTarget.style.background = "#3182ce")}
+                >
+                    Detay
+                </button>
+            </div>
         </div>
     );
 };
