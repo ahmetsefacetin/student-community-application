@@ -24,16 +24,16 @@ namespace Repositories.EFCore
         public async Task<Club?> GetClubByIdAsync(int id, bool trackChanges)
         {
             return await (trackChanges
-                ? _context.Clubs
-                : _context.Clubs.AsNoTracking())
+                ? _context.Clubs.Include(c => c.Manager)
+                : _context.Clubs.Include(c => c.Manager).AsNoTracking())
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task<Club?> GetClubWithMembersAsync(int id, bool trackChanges)
         {
             return await (trackChanges
-                ? _context.Clubs.Include(c => c.Memberships)
-                : _context.Clubs.Include(c => c.Memberships).AsNoTracking())
+                ? _context.Clubs.Include(c => c.Manager).Include(c => c.Memberships)
+                : _context.Clubs.Include(c => c.Manager).Include(c => c.Memberships).AsNoTracking())
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 

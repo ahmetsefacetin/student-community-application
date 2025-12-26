@@ -25,11 +25,11 @@ const AppRouter = () => {
           <Route path="/admin/clubs/create" element={<AdminCreateClubPage />} />
         </Route>
 
+        {/* Club details accessible to everyone; edit is protected */}
+        <Route path="/clubs/:id" element={<ClubDetailsPage />} />
+
         <Route element={<ProtectedRoute />}>
-          {/* Protected routes go here */}
-          {/* now there are no protected routes */}
           <Route path="/clubs/:id/edit" element={<UpdateClubPage />} />
-          <Route path="/clubs/:id" element={<ClubDetailsPage />} />
         </Route>
 
       </Route>
