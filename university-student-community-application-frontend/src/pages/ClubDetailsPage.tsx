@@ -4,12 +4,23 @@ import { clubService } from "../services/clubService";
 import type { ClubResponseDto, ClubMemberDto } from "../types/club";
 import { ClubRole } from "../types/club";
 import { useAuth } from "../hooks/useAuth";
+import { eventService } from "../services/eventService";
+import type { ClubEvent, CreateClubEventDto } from "../types/event";
 
 const ClubDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const { isAuthenticated } = useAuth();
   const [club, setClub] = useState<ClubResponseDto | null>(null);
   const [members, setMembers] = useState<ClubMemberDto[]>([]);
+  const [events, setEvents] = useState<ClubEvent[]>([]);
+  const [eventForm, setEventForm] = useState<CreateClubEventDto>({
+    title: "",
+    description: "",
+    location: "",
+    startTime: "",
+    endTime: "",
+  });
+  const [eventError, setEventError] = useState("");
   const [role, setRole] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
@@ -21,13 +32,15 @@ const ClubDetailsPage = () => {
 
     const load = async () => {
       try {
-        const [clubData, membersData] = await Promise.all([
+        const [clubData, membersData, eventData] = await Promise.all([
           clubService.getClubById(Number(id)),
           clubService.getMembers(Number(id)),
+          eventService.list(Number(id)),
         ]);
 
         setClub(clubData);
         setMembers(membersData);
+        setEvents(eventData);
 
         if (isAuthenticated) {
           try {
@@ -108,6 +121,34 @@ const ClubDetailsPage = () => {
       setActionError(err?.response?.data?.message ?? "Ayrilma sirasinda bir hata olustu.");
     } finally {
       setActionLoading(false);
+    }
+  };
+
+  const formatDate = (iso: string) => {
+    try {
+      return new Date(iso).toLocaleString();
+    } catch {
+      return iso;
+    }
+  };
+
+  const createEvent = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!id) return;
+    setEventError("");
+    try {
+      await eventService.create(Number(id), eventForm);
+      const updated = await eventService.list(Number(id));
+      setEvents(updated);
+      setEventForm({
+        title: "",
+        description: "",
+        location: "",
+        startTime: "",
+        endTime: "",
+      });
+    } catch (err: any) {
+      setEventError(err?.response?.data?.message ?? "Etkinlik olusturulurken bir hata olustu.");
     }
   };
 
@@ -281,6 +322,100 @@ const ClubDetailsPage = () => {
                   Kulup Bilgilerini Guncelle
                 </button>
               </div>
+            )}
+          </div>
+
+          <div
+            style={{
+              background: "#fff",
+              borderRadius: "12px",
+              boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
+              padding: "1.25rem",
+            }}
+          >
+            <h3 style={{ fontSize: "1.1rem", fontWeight: 700, marginBottom: "0.75rem" }}>
+              Etkinlikler
+            </h3>
+            {events.length === 0 && <p>Etkinlik bulunmuyor.</p>}
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+              {events.map((ev) => (
+                <div
+                  key={ev.id}
+                  style={{
+                    border: "1px solid #e2e8f0",
+                    borderRadius: "10px",
+                    padding: "0.75rem",
+                  }}
+                >
+                  <div style={{ fontWeight: 700 }}>{ev.title}</div>
+                  {ev.description && (
+                    <div style={{ marginTop: "0.25rem", color: "#4a5568", fontSize: "0.95rem" }}>
+                      {ev.description}
+                    </div>
+                  )}
+                  <div style={{ marginTop: "0.35rem", fontSize: "0.9rem", color: "#2d3748" }}>
+                    {formatDate(ev.startTime)} - {formatDate(ev.endTime)}
+                  </div>
+                  {ev.location && (
+                    <div style={{ fontSize: "0.9rem", color: "#2d3748" }}>
+                      Lokasyon: {ev.location}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {(role === "Manager" || role === "Officer") && (
+              <form onSubmit={createEvent} style={{ marginTop: "1rem", display: "grid", gap: "0.75rem" }}>
+                <h4 style={{ fontWeight: 700 }}>Yeni Etkinlik</h4>
+                {eventError && <p style={{ color: "#e53e3e", fontSize: "0.9rem" }}>{eventError}</p>}
+                <div>
+                  <label>Baslik</label>
+                  <input
+                    value={eventForm.title}
+                    onChange={(e) => setEventForm({ ...eventForm, title: e.target.value })}
+                    required
+                  />
+                </div>
+                <div>
+                  <label>Aciklama</label>
+                  <textarea
+                    value={eventForm.description ?? ""}
+                    onChange={(e) => setEventForm({ ...eventForm, description: e.target.value })}
+                    rows={2}
+                  />
+                </div>
+                <div>
+                  <label>Lokasyon</label>
+                  <input
+                    value={eventForm.location ?? ""}
+                    onChange={(e) => setEventForm({ ...eventForm, location: e.target.value })}
+                  />
+                </div>
+                <div style={{ display: "grid", gap: "0.5rem", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))" }}>
+                  <div>
+                    <label>Baslangic</label>
+                    <input
+                      type="datetime-local"
+                      value={eventForm.startTime}
+                      onChange={(e) => setEventForm({ ...eventForm, startTime: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label>Bitis</label>
+                    <input
+                      type="datetime-local"
+                      value={eventForm.endTime}
+                      onChange={(e) => setEventForm({ ...eventForm, endTime: e.target.value })}
+                      required
+                    />
+                  </div>
+                </div>
+                <div>
+                  <button type="submit">Etkinlik Olustur</button>
+                </div>
+              </form>
             )}
           </div>
 
