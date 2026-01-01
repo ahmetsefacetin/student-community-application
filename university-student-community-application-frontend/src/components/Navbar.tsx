@@ -24,7 +24,8 @@ const Navbar: React.FC = () => {
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
-      boxSizing: 'border-box'
+      boxSizing: 'border-box',
+      backgroundColor: '#ffffffff',
     }}>
       <div className="nav-links">
         <button onClick={() => navigate('/')}>Anasayfa</button>
