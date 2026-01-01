@@ -30,6 +30,12 @@ const Navbar: React.FC = () => {
         <button onClick={() => navigate('/')}>Anasayfa</button>
       </div>
 
+      {user && (
+      <div>
+        <h1>{user.fullName}</h1>
+      </div>
+      )}
+
       <div style={{ display: 'flex', gap: '10px' }}>
         {isAuthenticated && user?.roles.includes("Admin") && (
           <button onClick={() => navigate("/admin/clubs/create")}>

@@ -14,7 +14,9 @@ function decodeToken(token: string): TokenPayload | null {
   try {
     const base64 = token.split(".")[1];
     const normalized = base64.replace(/-/g, "+").replace(/_/g, "/");
-    const json = atob(normalized);
+    const binary = atob(normalized);
+    const bytes = Uint8Array.from(binary, c => c.charCodeAt(0));
+    const json = new TextDecoder().decode(bytes);
     return JSON.parse(json);
   } catch {
     return null;
