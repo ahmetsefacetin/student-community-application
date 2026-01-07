@@ -123,16 +123,6 @@ namespace WebApi.Migrations
                         .IsUnique();
 
                     b.ToTable("ClubMemberships", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 99999,
-                            ClubId = 1,
-                            JoinedAt = new DateTime(2025, 12, 26, 10, 53, 19, 894, DateTimeKind.Utc).AddTicks(3588),
-                            Role = 1,
-                            UserId = "5342e9a1-4ba0-424a-ad00-e4a5d482f272"
-                        });
                 });
 
             modelBuilder.Entity("Entities.Models.ClubRoleDefinition", b =>
@@ -344,7 +334,7 @@ namespace WebApi.Migrations
                         {
                             Id = "admin-seed-001",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "33d889b4-b23c-406d-b557-1badea84fb5e",
+                            ConcurrencyStamp = "c9657d49-56c3-46ce-a019-7ebbd5c2804e",
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "admin@clubapp.com",
                             EmailConfirmed = true,
@@ -353,9 +343,9 @@ namespace WebApi.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@CLUBAPP.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEHeF9r5LRQYUiH2jm01rGDhnd8h6KmDdiaEHe4luQLO3Hk4xSxTYLE4wY1SCqJbU3Q==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEPeZX6kogvH0l3W3GxcZM1zE7SfJxXFeArozaVgdq0Oe9fkmT7SEYjIkliPwj3fd3A==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "7a4a7ce3-f5ee-4383-a798-0734c5dff825",
+                            SecurityStamp = "1bea583a-49b3-4794-aa55-892a05b86b3a",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });

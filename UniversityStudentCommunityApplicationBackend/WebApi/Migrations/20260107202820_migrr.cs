@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WebApi.Migrations
 {
     /// <inheritdoc />
-    public partial class initialMigration : Migration
+    public partial class migrr : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -236,6 +236,31 @@ namespace WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ClubEvents",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ClubId = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
+                    Location = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
+                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedByUserId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClubEvents", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ClubEvents_Clubs_ClubId",
+                        column: x => x.ClubId,
+                        principalTable: "Clubs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ClubMemberships",
                 columns: table => new
                 {
@@ -275,7 +300,7 @@ namespace WebApi.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "CreatedAt", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "admin-seed-001", 0, "7b70713f-8222-44d8-95a5-193bb3a376a2", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "admin@clubapp.com", true, "System", "Administrator", false, null, "ADMIN@CLUBAPP.COM", "ADMIN", "AQAAAAIAAYagAAAAEF7pVtaO64Mavgx06zL5XMuyxMWk2kEdjhIyCEfoSEPYLJwsp1JHI7Wj4FfdYwWlcg==", null, false, "c284f9ce-390d-484d-a3c2-a00f55067d57", false, "admin" });
+                values: new object[] { "admin-seed-001", 0, "c9657d49-56c3-46ce-a019-7ebbd5c2804e", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "admin@clubapp.com", true, "System", "Administrator", false, null, "ADMIN@CLUBAPP.COM", "ADMIN", "AQAAAAIAAYagAAAAEPeZX6kogvH0l3W3GxcZM1zE7SfJxXFeArozaVgdq0Oe9fkmT7SEYjIkliPwj3fd3A==", null, false, "1bea583a-49b3-4794-aa55-892a05b86b3a", false, "admin" });
 
             migrationBuilder.InsertData(
                 table: "ClubRoleDefinitions",
@@ -351,6 +376,11 @@ namespace WebApi.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ClubEvents_ClubId",
+                table: "ClubEvents",
+                column: "ClubId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ClubMemberships_ClubId_UserId",
                 table: "ClubMemberships",
                 columns: new[] { "ClubId", "UserId" },
@@ -401,6 +431,9 @@ namespace WebApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "ClubEvents");
 
             migrationBuilder.DropTable(
                 name: "ClubMemberships");

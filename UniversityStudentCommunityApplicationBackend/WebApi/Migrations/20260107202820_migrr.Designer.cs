@@ -12,8 +12,8 @@ using Repositories.EFCore;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20251202163612_createAtClub")]
-    partial class createAtClub
+    [Migration("20260107202820_migrr")]
+    partial class migrr
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,6 +54,47 @@ namespace WebApi.Migrations
                     b.HasIndex("ManagerId");
 
                     b.ToTable("Clubs", (string)null);
+                });
+
+            modelBuilder.Entity("Entities.Models.ClubEvent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClubId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedByUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Location")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClubId");
+
+                    b.ToTable("ClubEvents", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Models.ClubMembership", b =>
@@ -296,7 +337,7 @@ namespace WebApi.Migrations
                         {
                             Id = "admin-seed-001",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b6d325e1-85ca-4f99-b9c0-1ebd32de108e",
+                            ConcurrencyStamp = "c9657d49-56c3-46ce-a019-7ebbd5c2804e",
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "admin@clubapp.com",
                             EmailConfirmed = true,
@@ -305,9 +346,9 @@ namespace WebApi.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@CLUBAPP.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEIonCsYJuSEsRMDXDLJWmrmVBar6Mfu4c8wgSNdXxCWvFC0vNrxprvg/Y5eUC8BNsQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEPeZX6kogvH0l3W3GxcZM1zE7SfJxXFeArozaVgdq0Oe9fkmT7SEYjIkliPwj3fd3A==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "ed162fff-7839-4875-a76d-5bce6c8cf900",
+                            SecurityStamp = "1bea583a-49b3-4794-aa55-892a05b86b3a",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -478,6 +519,17 @@ namespace WebApi.Migrations
                     b.Navigation("Manager");
                 });
 
+            modelBuilder.Entity("Entities.Models.ClubEvent", b =>
+                {
+                    b.HasOne("Entities.Models.Club", "Club")
+                        .WithMany("Events")
+                        .HasForeignKey("ClubId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Club");
+                });
+
             modelBuilder.Entity("Entities.Models.ClubMembership", b =>
                 {
                     b.HasOne("Entities.Models.Club", "Club")
@@ -561,6 +613,8 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("Entities.Models.Club", b =>
                 {
+                    b.Navigation("Events");
+
                     b.Navigation("Memberships");
                 });
 
