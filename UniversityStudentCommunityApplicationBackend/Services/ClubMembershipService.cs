@@ -100,14 +100,6 @@ namespace Services
 
             var members = await _membershipRepo.GetMembersOfClubAsync(clubId, false);
 
-            var manager = new ClubMemberResponseDto
-            {
-                UserId = club.ManagerId,
-                FullName = club.Manager?.FullName ?? "",
-                Role = ClubRole.Manager,
-                JoinedAt = DateTime.MinValue
-            };
-
             var mapped = members.Select(m => new ClubMemberResponseDto
             {
                 UserId = m.UserId,
@@ -115,8 +107,6 @@ namespace Services
                 Role = m.Role,
                 JoinedAt = m.JoinedAt
             }).ToList();
-
-            mapped.Insert(0, manager);
 
             return mapped;
         }
