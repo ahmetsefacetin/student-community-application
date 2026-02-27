@@ -4,13 +4,7 @@ using Entities.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Http.Results;
 
 namespace Presentation.Controllers
 {
@@ -31,7 +25,7 @@ namespace Presentation.Controllers
         [Authorize]
         public async Task<ActionResult<UserClubRoleDto>> GetUserClubRole(int id)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = User.FindFirstValue("sub");
             if (string.IsNullOrEmpty(userId))
                 return Unauthorized();
 
@@ -43,7 +37,7 @@ namespace Presentation.Controllers
         [Authorize]
         public async Task<IActionResult> MakeMemberOfficer(int clubId, string userId)
         {
-            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currentUserId = User.FindFirstValue("sub");
             if (string.IsNullOrEmpty(userId))
                 return Unauthorized();
 
@@ -78,7 +72,7 @@ namespace Presentation.Controllers
         [Authorize]
         public async Task<IActionResult> DemoteOfficer(int clubId, string userId)
         {
-            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currentUserId = User.FindFirstValue("sub");
             if (string.IsNullOrEmpty(userId))
                 return Unauthorized();
 

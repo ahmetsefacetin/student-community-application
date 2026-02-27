@@ -55,7 +55,7 @@ namespace Presentation.Controllers
         [Authorize]
         public async Task<IActionResult> JoinClub(int id)
         {
-            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currentUserId = User.FindFirstValue("sub");
             if (string.IsNullOrEmpty(currentUserId))
                 return Unauthorized();
 
@@ -67,7 +67,7 @@ namespace Presentation.Controllers
         [Authorize]
         public async Task<IActionResult> LeaveClub(int id)
         {
-            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currentUserId = User.FindFirstValue("sub"); 
             if (string.IsNullOrEmpty(currentUserId))
                 return Unauthorized();
 
@@ -79,7 +79,7 @@ namespace Presentation.Controllers
         [Authorize]
         public async Task<IActionResult> UpdateClub(int id, [FromBody] UpdateClubDto dto)
         {
-            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currentUserId = User.FindFirstValue("sub");
             if (string.IsNullOrEmpty(currentUserId))
                 return Unauthorized();
 

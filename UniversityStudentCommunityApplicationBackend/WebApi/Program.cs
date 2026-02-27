@@ -75,6 +75,8 @@ builder.Services.AddAuthentication(options =>
     var jwtSection = builder.Configuration.GetSection("Jwt");
     var key = Encoding.UTF8.GetBytes(jwtSection["Key"]!);
 
+    options.MapInboundClaims = false; // claim adlarýný dönüþtürme
+
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
@@ -84,7 +86,10 @@ builder.Services.AddAuthentication(options =>
         ClockSkew = TimeSpan.Zero,
         ValidIssuer = jwtSection["Issuer"],
         ValidAudience = jwtSection["Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(key)
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+
+        NameClaimType = "sub",
+        RoleClaimType = "role"
     };
 });
 

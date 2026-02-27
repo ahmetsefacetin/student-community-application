@@ -29,7 +29,7 @@ namespace Presentation.Controllers
         [Authorize]
         public async Task<ActionResult<ClubEventResponseDto>> CreateEvent(int clubId, [FromBody] CreateClubEventDto dto)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = User.FindFirstValue("sub");
             if (string.IsNullOrEmpty(userId))
                 return Unauthorized();
 
@@ -41,7 +41,7 @@ namespace Presentation.Controllers
         [Authorize]
         public async Task<ActionResult<ClubEventResponseDto>> UpdateEvent(int clubId, int eventId, [FromBody] UpdateClubEventDto dto)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = User.FindFirstValue("sub");
             if (string.IsNullOrEmpty(userId))
                 return Unauthorized();
 
@@ -53,7 +53,7 @@ namespace Presentation.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteEvent(int clubId, int eventId)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = User.FindFirstValue("sub");
             if (string.IsNullOrEmpty(userId))
                 return Unauthorized();
 
